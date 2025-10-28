@@ -6,6 +6,11 @@ const paymentSchema=new Schema({
     paymentId:String,
     signature:String,
     receiptId:String,
+    userId:{
+        type:Schema.Types.ObjectId,
+        ref:"userRegistration",
+        required:true
+    },
     status:{
         type:String,
         enum:["success","failure"]
