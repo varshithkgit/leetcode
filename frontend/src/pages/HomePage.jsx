@@ -50,8 +50,8 @@ function Homepage() {
                             const difficulty=filter.difficulty=="all"||problem.difficulty==filter.difficulty;
                             const tags=filter.tags=="all"||problem.tags==filter.tags;
                             return difficulty && tags;
-                            }).filter((_,i)=>(i>(page-1)*4 && i<=page*4));
-
+                            }).filter((_,i)=>(i>=(page-1)*4 && i<page*4));
+                            
     // m-2
   // const filteredProblems = problems.filter(problem => {
   //   const difficultyMatch = filters.difficulty === 'all' || problem.difficulty === filters.difficulty;

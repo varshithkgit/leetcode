@@ -9,7 +9,23 @@ import { registerUser } from "../authSlice";
 const frontendSchema= z.object({
   firstname: z.string().min(3,"There should be atleast 3 characters in name field"),
   emailID:z.string().email("Invalid email"),
-  password: z.string().min(8,"There should be atleast 8 characters in password field")
+  password: z.string().min(8, "Password must be at least 8 characters long")
+  .refine(
+    (val) => /[A-Z]/.test(val),
+    "Password must contain at least one uppercase letter"
+  )
+  .refine(
+    (val) => /[a-z]/.test(val),
+    "Password must contain at least one lowercase letter"
+  )
+  .refine(
+    (val) => /[0-9]/.test(val),
+    "Password must contain at least one number"
+  )
+  .refine(
+    (val) => /[!@#$%^&*(),.?":{}|<>]/.test(val),
+    "Password must contain at least one special character"
+  )
 });
 
 function SignUp(){

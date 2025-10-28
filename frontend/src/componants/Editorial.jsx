@@ -1,11 +1,13 @@
 import { Pause, Play } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+import axiosClient from "../utils/axiosClient";
 
 const Editorial = ({prblm, secureUrl, thumbnailUrl, duration }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
+  const [show,setShow]=useState(false);
   const videoRef = useRef(null);
   const {dark}=useSelector(state=>state.slice);
 
@@ -25,22 +27,44 @@ const Editorial = ({prblm, secureUrl, thumbnailUrl, duration }) => {
       setIsPlaying(!isPlaying);
     }
   };
-  
+
+
+  useEffect(()=>{
+    const premium=async()=>{
+    try {
+       const {data}=await axiosClient.get("/pay/premium");
+
+       setShow(data.premium?data.premium:false);
+    } catch (error) {
+      alert("There was an error:- "+error);
+    }
+  }
+
+  premium();
+  },[]);
+
   useEffect(() => {
     const video = videoRef.current;
-
+    
     const handleTimeUpdate = () => {
-      if (video) setCurrentTime(video.currentTime);
+      console.log(video);
+      if (video){
+         setCurrentTime(video.currentTime);
+      }  
     };
 
     if (video) {
       video.addEventListener("timeupdate", handleTimeUpdate);
       return () => video.removeEventListener("timeupdate", handleTimeUpdate);
     }
-  }, []);
+
+  }, [isPlaying]);
 
   return (
     <>
+    {
+      show ?
+      (
     <div
       className="relative w-full max-w-2xl mx-auto rounded-xl overflow-hidden shadow-xl group"
       onMouseEnter={() => setIsHovering(true)}
@@ -49,8 +73,8 @@ const Editorial = ({prblm, secureUrl, thumbnailUrl, duration }) => {
       {/* Video */}
       <video
         ref={videoRef}
-        src={secureUrl}
-        poster={thumbnailUrl}
+        src={"https://res.cloudinary.com/dbnronhrf/video/upload/v1760782895/leetcode-solutions/683ac428ef8de5ba23bf7ec7/6836f91c31345473642014b4_1760782799.mp4"} //secureUrl
+        poster={"https://res.cloudinary.com/dbnronhrf/video/upload/so_8.5/v1/leetcode-solutions/683ac428ef8de5ba23bf7ec7/6836f91c31345473642014b4_1760782799?_a=BAMClqeA0"} //thumbnailUrl
         onClick={handleControl}
         className={`${dark ? "bg-black" : "bg-white"} w-full aspect-video cursor-pointer`}
       />
@@ -77,20 +101,28 @@ const Editorial = ({prblm, secureUrl, thumbnailUrl, duration }) => {
             <input
               type="range"
               min="0"
-              max={duration}
+              max={videoRef.current?.duration || duration}
               value={currentTime}
               onChange={(e) => {
                 if (videoRef.current) {
                   videoRef.current.currentTime = Number(e.target.value);
+                  setCurrentTime(Number(e.target.value));
                 }
               }}
               className={`${dark ? "bg-gray-600" : "bg-gray-300"} w-full accent-[#FE7743] h-[3px] rounded-lg appearance-none transition-all`}
             />
-            <span className={`${dark ? "text-white" : "text-black"} text-xs w-10 text-left`}>{(currentTime < duration) ? formatTime(duration - currentTime) : "0:00"}</span>
+            <span className={`${dark ? "text-white" : "text-black"} text-xs w-10 text-left`}>{(currentTime < videoRef.current?.duration) ? formatTime(videoRef.current?.duration - currentTime) : "0:00"}</span>
           </div>
         </div>
       </div>
     </div>
+      ):
+      (
+            <div className="flex items-center justify-center w-full h-70 max-w-2xl mx-auto rounded-xl overflow-hidden shadow-xl group bg-black">
+                 <div className='text-white'>Upgrade to premium to access editorial</div>
+            </div>
+      )
+    }
 
     {/* Approaches Section */}
 <div className={`${dark ? "text-white" : "text-black"} mt-10 max-w-2xl mx-auto space-y-8`}>

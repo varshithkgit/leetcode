@@ -354,6 +354,7 @@ function Profile() {
   <div className="mt-4">
    <div className="space-y-4 h-[300px] overflow-y-scroll">
     {
+      recentAc?.length!=0?(
    recentAc.map((obj,i)=>(
     <div key={i} className={`${dark ? "bg-gray-900 text-white shadow" : "bg-gray-100 text-black shadow-md"} p-4 rounded-lg flex flex-col md:flex-row justify-between items-start md:items-center`}>
       <div>
@@ -366,6 +367,10 @@ function Profile() {
       </div>
     </div>
     ))
+    ):
+    (
+      <img className="w-[200px] mx-auto my-auto" src="https://leetcode.com/_next/static/images/null_dark-3f55ffa94690763ee68c9a2be3074a42.png"></img>
+    )
     }
    </div>
   </div>
@@ -377,6 +382,7 @@ function Profile() {
   (
     <div className="h-[300px] overflow-y-scroll">
 {
+   discuss?.length!=0?(
 discuss.map((obj)=>(
 <div className="space-y-4" key={obj._id}>
   <div className={`${dark ? "bg-gray-900 text-white shadow" : "bg-white text-black shadow-md"} p-4 rounded-box my-5`}>
@@ -388,7 +394,11 @@ discuss.map((obj)=>(
     </div>
   </div>
 </div>
-))  
+))
+   ):
+   (
+     <img className="w-[200px] mt-10 mx-auto my-auto" src="https://leetcode.com/_next/static/images/null_dark-3f55ffa94690763ee68c9a2be3074a42.png"></img>
+   )  
 }
   </div>
 )
@@ -397,6 +407,7 @@ discuss.map((obj)=>(
   tabPanel=="Solved" &&(
  <div className="h-[300px] overflow-y-scroll scrollbar-hide">
   {
+    userSolvedPrblms?.length!=0?(
   userSolvedPrblms.map((obj)=>(
     <div key={obj._id} className={`card rounded-xl my-4 ${dark ? "bg-gray-900 shadow-lg" : "bg-gray-100 shadow-md"}`}>
           <div className="card-body space-y-3">
@@ -420,6 +431,11 @@ discuss.map((obj)=>(
         </div>
   )
   )
+  ):
+   (
+     <img className="w-[200px] mt-10 mx-auto my-auto" src="https://leetcode.com/_next/static/images/null_dark-3f55ffa94690763ee68c9a2be3074a42.png"></img>
+   )  
+  
 }
  </div> 
   )
@@ -428,6 +444,7 @@ discuss.map((obj)=>(
   tabPanel=="List"&&(
  <div className="h-[300px] overflow-y-scroll scrollbar-hide">
   {
+    stars?.length!=0?(
   (prblms.filter((obj)=>stars.includes(obj._id))).map((obj)=>(
     <div key={obj._id} className={`card rounded-xl my-4 ${dark ? "bg-gray-900 shadow-lg" : "bg-gray-100 shadow-md"}`}>
           <div className="card-body space-y-3">
@@ -451,6 +468,10 @@ discuss.map((obj)=>(
         </div>
   )
   )
+
+):(
+  <img className="w-[200px] mt-10 mx-auto my-auto" src="https://leetcode.com/_next/static/images/null_dark-3f55ffa94690763ee68c9a2be3074a42.png"></img>
+)
 }
  </div> 
   )
